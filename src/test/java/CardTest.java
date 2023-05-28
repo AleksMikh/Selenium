@@ -82,13 +82,30 @@ class CardTest {
         String actual = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText();
         Assertions.assertEquals(expected, actual);
     }
+    @Test
+    void whenPhoneEmpty() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys("Алексеев Михаил");
+        driver.findElement(By.cssSelector("[data-test-id=agreement]")).click();
+        driver.findElement(By.cssSelector("button")).click();
+        String expected = "Поле обязательно для заполнения";
+        String actual = driver.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub")).getText();
+        Assertions.assertEquals(expected, actual);
+    }
 
     @Test
-    void EmptyForm() {
-        driver.get("http://localhost:9999/");
+    void emptyForm() {
         driver.findElement(By.className("button__text")).click();
         String expected = "Поле обязательно для заполнения";
-        String actual = driver.findElement(By.className("input__sub")).getText();
+        String actual = driver.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub")).getText();
+        Assertions.assertEquals(expected, actual);
+    }
+    @Test
+    void withoutCheckbox() {
+        driver.findElement(By.cssSelector("[data-test-id=name] input")).sendKeys(("Алексеев Михаил"));
+        driver.findElement(By.cssSelector("[data-test-id=phone] input")).sendKeys(("+79266565566"));
+        driver.findElement(By.cssSelector("button")).click();
+        String expected = "Я соглашаюсь с условиями обработки и использования моих персональных данных и разрешаю сделать запрос в бюро кредитных историй";
+        String actual = driver.findElement(By.cssSelector("[data-test-id=agreement] [role=presentation]")).getText();
         Assertions.assertEquals(expected, actual);
     }
 }
